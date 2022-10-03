@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<launch>
+	<!--<node pkg="hku_m100_gazebo" type="move_spheres" name="move_spheres" output="screen"/> -->
+	<!-- Start Bridge Node with roslaunch rather than bash -->
+	<node name="hku_m100_pcsim_gazebo_bridge" pkg="hku_m100_gazebo" type="hku_m100_pcsim_gazebo_bridge" respawn="true" /> 
+	<!-- Start rviz visualization with preset config -->
+	 <!--<arg name="model" default="$(find hku_m100_description)/urdf/hku_m100_base_with_gimbal.urdf.xacro"/>
+	<arg name="name" default="hku_m100"/>
+	<arg name="world_frame" default="/world"/>
+	<param name="robot_description"
+          command="$(find xacro)/xacro - -inorder '$(arg model)'
+                      hitl_model:=false"/>
+	<arg name="marker_size" default="27.2" />
+	<arg name="max_new_marker_error" default="0.08" />
+	<arg name="max_track_error" default="0.2" />
+	<arg name="cam_image_topic" default="/front_cam/camera/image" />
+	<arg name="cam_info_topic" default="/front_cam/camera/camera_info" />	
+	<arg name="output_frame" default="/front_cam_link" />
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hku_m100_gazebo)/rviz_cfg/flight.rviz"/> -->
+
+	<node pkg="hku_m100_gazebo" type="rviz_collision_publisher" name="rviz_collision_publisher" output="screen"/>
+
+  
+  <!-- Start rviz visualization with preset config -->
+  <!--<node pkg="rviz" type="rviz" name="rviz" args="-d $(find hector_quadrotor_demo)/rviz_cfg/outdoor_flight.rviz"/>-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hku_m100_gazebo)/rviz_cfg/flight.rviz"/>
+	
+
+
+
+
+    
+	<node pkg="hku_m100_gazebo" type="psu_m100_gasSensor" name="psu_m100_gasSensor" output="screen"/>
+
+
+
+</launch>

@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+
+<launch>
+	<node pkg="hku_m100_gazebo" type="move_spheres" name="move_spheres" output="screen"/>
+</launch>
