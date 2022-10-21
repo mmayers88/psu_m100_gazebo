@@ -36,7 +36,7 @@ int main(int argc, char **argv)
       geometry_msgs::Point sphere_point = get_model_state.response.pose.position;
       sphere_point.x++;
       sphere_point.y++;
-      sphere_point.z = sphere_point.y - 10;
+      sphere_point.z = sphere_point.z - 10;
       sphere_centers2.push_back(sphere_point);
 
 		}

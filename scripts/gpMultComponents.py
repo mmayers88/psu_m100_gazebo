@@ -7,8 +7,8 @@ from scipy.spatial.distance import cdist
 # np.random.seed(10000)   # seed for generating test data (didn't do for training data)
 
 plt.close('all')
-Nx = 61
-Ny = 60
+Nx = 1000
+Ny = 1000
 xx = np.linspace(0.,1.,Nx)
 yy = np.linspace(0.,1.,Ny)
 xy = np.array(list(product(xx, yy)))

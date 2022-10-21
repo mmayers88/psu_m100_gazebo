@@ -1,15 +1,7 @@
 hku_m100_gazebo
 =========
 
-<<<<<<< HEAD
 A ROS package for simulating the DJI Matrice 100 Drone in Gazebo
-=======
-## Spacial sampling
-- **work in progress**
-- **will be updated**
-- **There will be a working docker image**
-- **There will be installation instructions**
->>>>>>> 08713dc8d3f88ad87377efb2ef45f84578773d53
 
 
 **Installation**
