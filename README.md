@@ -1,11 +1,35 @@
-# psu_m100_gazebo
-This is based off of the work of [caochao39 Gazebo](https://github.com/caochao39/hku_m100_gazebo), [caochao39 Description](https://github.com/caochao39/hku_m100_description), and [tahsinkose](https://github.com/dji-m100-ros/dji_m100_gazebo).
+hku_m100_gazebo
+=========
 
-## Spacial sampling
-==work in progress==
-==will be updated==
-==There will be a working docker image==
-==There will be installation instructions==
+A ROS package for simulating the DJI Matrice 100 Drone in Gazebo
 
 
+**Installation**
 
+Clone this repo into your catkin workspace and build.
+
+
+**Configuration**
+  * Turn on DJI Matrice 100 and connect it to the PC simulator
+  * Turn on the Manifold and setup the roscore on it
+  * Set ROS_MASTER_URI to the Manifold IP
+
+
+**Usage**
+Open the gazebo simulation
+> $ roslaunch hku_m100_gazebo empty_world_with_tags.launch
+
+You should see in the gazebo world a parking Matrice 100 and a truck
+
+![Gazebo world](/images/gazebo.png)
+
+Connect the drone in Gazebo with the drone in the PC simulator
+> $ rosrun hku_m100_gazebo hku_m100_pcsim_gazebo_bridge
+
+Control the drone using the DJI remote controller, you should see the drone flying in the gazebo world
+
+![Drone connection](/images/gazebo_drone_in_control.png)
+
+You can also play with the gimbal
+
+![Drone connection](/images/gazebo_gimbal.png)
