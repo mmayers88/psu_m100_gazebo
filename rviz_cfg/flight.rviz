@@ -146,7 +146,7 @@ Visualization Manager:
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
-      Enabled: false
+      Enabled: true
       Marker Topic: /command/pose_marker
       Name: Marker
       Namespaces:
