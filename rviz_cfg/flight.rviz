@@ -86,9 +86,9 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-      Name: RobotModel
+      Name: hku_m100
       Robot Description: robot_description
-      TF Prefix: ""
+      TF Prefix: hku_m100
       Update Interval: 0
       Value: true
       Visual Enabled: true
@@ -146,7 +146,7 @@ Visualization Manager:
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: /command/pose_marker
       Name: Marker
       Namespaces:

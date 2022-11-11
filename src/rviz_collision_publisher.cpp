@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     for (int row = 0; row < nr_of_obstacles; row++)
         for (int col = 0; col < nr_of_obstacles; col++)
         {
-            cout << col + row * 1000 << " " << data[row][col] << endl;
+            //cout << col + row * 1000 << " " << data[row][col] << endl;
             geometry_msgs::Point sphere_point;
             geometry_msgs::Point sphere_point2;
             sphere_point.x = row;
@@ -47,40 +47,39 @@ int main(int argc, char **argv)
             sphere_point2.z = sphere_point.z - 10;
 
             sphere_centers2.push_back(sphere_point2);
-            cout << "before if... ";
             if (data[row][col] > 0.90)
             {
                 // rgb(253, 231, 37) #fde725.
                 visual_tools_->publishCuboid(sphere_point, sphere_point2, rviz_visual_tools::YELLOW, "Obstacles", 0);
-                cout << "90%"<<endl;
+                //cout << "90%"<<endl;
                 continue;
             }
             else if (data[row][col] > 0.70)
             {
                 // rgb(94, 201, 98) #5ec962.
                 visual_tools_->publishCuboid(sphere_point, sphere_point2, rviz_visual_tools::LIME_GREEN, "Obstacles", 0);
-                cout << "70%"<<endl;
+                //cout << "70%"<<endl;
                 continue;
             }
             else if (data[row][col] > 0.50)
             {
                 // rgb(33, 145, 140) #21918c.
                 visual_tools_->publishCuboid(sphere_point, sphere_point2, rviz_visual_tools::GREEN, "Obstacles", 0);
-                cout << "50%"<<endl;
+                //cout << "50%"<<endl;
                 continue;
             }
             else if (data[row][col] > 0.30)
             {
                 // rgb(59, 82, 139) #3b528b.
                 visual_tools_->publishCuboid(sphere_point, sphere_point2, rviz_visual_tools::BLUE, "Obstacles", 0);
-                cout << "30%"<<endl;
+                //cout << "30%"<<endl;
                 continue;
             }
             else
             {
                 // rgb(68, 1, 84) #440154.
                 visual_tools_->publishCuboid(sphere_point, sphere_point2, rviz_visual_tools::BLACK, "Obstacles", 0);
-                cout << "else."<<endl;
+                //cout << "else."<<endl;
                 continue;
             }
         }
