@@ -9,6 +9,7 @@ Panels:
         - /LaserScan1/Autocompute Value Bounds1
         - /Camera1/Visibility1
         - /Marker1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 403
   - Class: rviz/Selection
@@ -85,7 +86,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-      Name: hku_m100
+      Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
       Update Interval: 0
@@ -123,7 +124,7 @@ Visualization Manager:
     - Class: rviz/Camera
       Enabled: true
       Image Rendering: background and overlay
-      Image Topic: /teamhku/image_raw
+      Image Topic: /front_cam/camera/image
       Name: Camera
       Overlay Alpha: 0.5
       Queue Size: 2
