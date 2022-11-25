@@ -2,7 +2,7 @@
 
 <launch>
   <arg name="name" default="hku_m100"/>
-  <arg name="model" default="$(find hku_m100_description)/urdf/hku_m100.urdf.xacro"/>
+  <arg name="model" default="$(find hku_m100_gazebo)/urdf/hku_m100.urdf.xacro"/>
   <arg name="tf_prefix" default="$(optenv ROS_NAMESPACE)"/>
 
   <arg name="x" default="3.0"/>
@@ -41,8 +41,9 @@
 
   <!-- publish state and tf -->
   <node name="ground_truth_to_tf" pkg="message_to_tf" type="message_to_tf" output="screen">
-    <param name="odometry_topic" value="ground_truth/state" />
+    <!-- <param name="odometry_topic" value="ground_truth/state" /> -->
     <!--<param name="odometry_topic" value="/$(arg name)/odometry" />-->
+	<param name="odometry_topic" value="dji_sdk/odometry" />
     <param name="frame_id" value="$(arg world_frame)" />
     <param name="tf_prefix" value="$(arg tf_prefix)" if="$(arg use_ground_truth_for_tf)" />
     <remap from="ground_truth_to_tf/pose" to="pose"/>
