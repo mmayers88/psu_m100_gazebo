@@ -26,25 +26,25 @@ int main(int argc, char **argv)
     gazebo_msgs::GetModelState get_model_state;
     std::vector<geometry_msgs::Point> sphere_centers;
     std::vector<geometry_msgs::Point> sphere_centers2;
-    int nr_of_obstacles;
-    nh.getParam("nr_of_obstacles", nr_of_obstacles);
+    int array_xy;
+    nh.getParam("array_xy", array_xy);
     visual_tools_->loadMarkerPub();
     visual_tools_->waitForMarkerPub();
     visual_tools_->setLifetime(0);
-    for (int row = 0; row < nr_of_obstacles; row++)
-        for (int col = 0; col < nr_of_obstacles; col++)
+    for (int row = 0; row < array_xy; row++)
+        for (int col = 0; col < array_xy; col++)
         {
             //cout << col + row * 1000 << " " << data[row][col] << endl;
             geometry_msgs::Point sphere_point;
             geometry_msgs::Point sphere_point2;
-            sphere_point.x = row;
-            sphere_point.y = col;
-            sphere_point.z = 10;
+            sphere_point.x = row - (array_xy/2);
+            sphere_point.y = col - (array_xy/2);
+            sphere_point.z = 0;
             sphere_centers.push_back(sphere_point);
 
             sphere_point2.x = sphere_point.x + 1;
             sphere_point2.y = sphere_point.y + 1;
-            sphere_point2.z = sphere_point.z - 10;
+            sphere_point2.z = sphere_point.z - 1;
 
             sphere_centers2.push_back(sphere_point2);
             if (data[row][col] > 0.90)

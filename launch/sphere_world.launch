@@ -12,12 +12,13 @@
 	</include>
 
 	<rosparam param="nr_of_obstacles">100</rosparam>
+	<rosparam param="array_xy">10</rosparam>
 		<!-- Spawn simulated quadrotor uav -->
-	<include file="$(find hku_m100_gazebo)/launch/spawn_hku_m100.launch" >
-    	<arg name="model" value="$(find hku_m100_gazebo)/urdf/hku_m100.urdf.xacro"/> 
-		<arg name="name" value="hku_m100" />
-		<arg name="tf_prefix" value="hku_m100" />
-	</include>
+		<include file="$(find hku_m100_gazebo)/launch/spawn_hku_m100.launch" >
+			<arg name="model" value="$(find hku_m100_gazebo)/urdf/hku_m100.urdf.xacro"/> 
+			<arg name="name" value="hku_m100" />
+			<arg name="tf_prefix" value="hku_m100" />
+		</include>
 	
 
 </launch>
