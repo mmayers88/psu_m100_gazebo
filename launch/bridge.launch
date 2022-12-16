@@ -19,7 +19,7 @@
 	<arg name="output_frame" default="/front_cam_link" />
     <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hku_m100_gazebo)/rviz_cfg/flight.rviz"/> -->
 
-	<node pkg="hku_m100_gazebo" type="rviz_collision_publisher" name="rviz_collision_publisher" output="screen"/>
+	<!--<node pkg="hku_m100_gazebo" type="rviz_collision_publisher" name="rviz_collision_publisher" output="screen"/>-->
 
   
   <!-- Start rviz visualization with preset config -->

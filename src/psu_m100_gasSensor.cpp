@@ -1,6 +1,7 @@
 #include <gazebo_msgs/GetModelState.h>
 #include <ros/ros.h>
 #include <cmath>
+#include "readCSV.h"
 #include "hku_m100_gazebo/GasSensor.h"
 
 const int sensitivity = 1;
@@ -16,16 +17,18 @@ class SphereMonitor
 {
 public:
 	ros::NodeHandle nh;
-	ros::ServiceClient gazebo_client =
-		nh.serviceClient<gazebo_msgs::GetModelState>(kModelSrvName);
+	ros::ServiceClient gazebo_client = nh.serviceClient<gazebo_msgs::GetModelState>(kModelSrvName);
 	gazebo_msgs::GetModelState get_model_state;
 	std::string drone_name = "hku_m100";
 	std::string relativeEntityName = (std::string) "world";
-	int nr_of_obstacles;
+	std::string filename = "/home/dronecomp/drone_ws/src/hku_m100_gazebo/src/array.csv";
+	data_t data;
+	int array_xy;
 	SphereMonitor()
 	{
-		nh.getParam("nr_of_obstacles", nr_of_obstacles);
-		InitSpheres(nr_of_obstacles, gazebo_client);
+		nh.getParam("array_xy", array_xy);
+		data.load(filename);
+		data.save(std::cout);
 	};
 
 	double printDist()
@@ -36,31 +39,14 @@ public:
 		// client.call(get_drone_state);
 		drone_pose = get_model_state.response.pose.position;
 		drone_ore = get_model_state.response.pose.orientation;
-		float count = 0.0;
-		for (int i = 0; i < nr_of_obstacles; i++)
+		double count = 0.0;
+		if (gazebo_client.call(get_model_state))
 		{
-			if (gazebo_client.call(get_model_state))
-			{
-				// std::cout << get_model_state.response << std::endl;
-				// std::cout << i << "_x: " << sphere_centers_[i].x << "y: " << sphere_centers_[i].y << "z: " << sphere_centers_[i].z << std::endl;
-				// std::cout << "Drone x: " << drone_pose.x << "y: " << drone_pose.y << "z: " << drone_pose.z << std::endl;
-				// std::cout << get_model_state.response.pose.position.x << get_model_state.response.pose.position.y << get_model_state.response.pose.position.z << std::endl;
-				double dist = sqrt(pow(sphere_centers_[i].x - drone_pose.x, 2) + pow(sphere_centers_[i].y - drone_pose.y, 2) + pow(sphere_centers_[i].z - drone_pose.z, 2));
-				// std::cout << i <<"_Dist: " << dist << std::endl;
-				if (dist <= 0.5)
-					count += sensitivity;
-				/*else if (dist <= 1.0)
-					count += 0.75 * sensitivity;
-				else if (dist <= 1.5)
-					count += 0.5 * sensitivity;
-				else if (dist <= 2.0)
-					count += 0.25 * sensitivity;*/
-				else if (dist <= 2.5)
-					count += (dist/2.5) * sensitivity;
-				else
-					continue;
-				// std::cout << i << "_Pose: "<< sphere_centers_[i].x << sphere_centers_[i].y << sphere_centers_[i].z << std::endl;
-			}
+			int diff = array_xy / 2;
+			if (drone_pose.x + diff > array_xy || drone_pose.y + diff > array_xy || drone_pose.x + diff < 0 || drone_pose.y + diff < 0)
+				count = 0.0;
+			else
+				count = data[drone_pose.x + diff][drone_pose.y + diff];
 		}
 		if (count > 0.0)
 			std::cout << count << std::endl;
@@ -75,17 +61,11 @@ public:
 private:
 	std::vector<geometry_msgs::Point> sphere_centers_;
 
-	void InitSpheres(int nr_of_obstacles, ros::ServiceClient gazebo_client)
+	void InitSpheres()
 	{
-		for (int i = 0; i < nr_of_obstacles; i++)
-		{
-			std::string sphere = "collision_sphere_clone_" + std::to_string(i);
-			get_model_state.request.model_name = sphere;
-			if (gazebo_client.call(get_model_state))
-			{
-				sphere_centers_.push_back(get_model_state.response.pose.position);
-			}
-		}
+		data.load(filename);
+		std::cout << "HERE!." << std::endl;
+		data.save(std::cout);
 		std::cout << "Spheres are live." << std::endl;
 	};
 };

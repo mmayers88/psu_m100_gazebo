@@ -1,0 +1,249 @@
+sudo apt-get update
+sudo apt-get dist-upgrade
+
+# after updates and upgrades
+#install Anaconda 3 (https://docs.anaconda.com/anaconda/install/linux/)
+
+sudo apt-get install libgl1-mesa-glx libegl1-mesa libxrandr2 libxrandr2 libxss1 libxcursor1 libxcomposite1 libasound2 libxi6 libxtst6
+
+download at => https://www.anaconda.com/products/distribution#linux
+
+bash ~/Downloads/Anaconda3-2020.02-Linux-x86_64.sh
+
+
+#================================================================================================
+#install ros (http://wiki.ros.org/kinetic/Installation/Ubuntu)
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+
+sudo apt install curl # if you haven't already installed curl
+
+curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+
+sudo apt update
+
+sudo apt -y install ros-kinetic-desktop-full
+
+sudo apt upgrade
+sudo apt-get -y install ros-kinetic-joint-trajectory-controller
+sudo apt-get -y install ros*controller*
+
+
+sudo apt-get -y install libgazebo7-dev
+sudo apt-get -y install ros-kinetic-gazebo-plugins
+sudo apt-get -y install ros-kinetic-gazebo-ros-control
+sudo apt-get -y install ros-kinetic-ros-comm
+
+
+
+sudo apt-get -y install libeigen3-dev ros-kinetic-image-view ros-kinetic-parrot-arsdk libprotobuf-dev libprotoc-dev ros-kinetic-joy-teleop ros-kinetic-nav-msgs ros-kinetic-mav-msgs libyaml-cpp-dev ros-kinetic-nodelet ros-kinetic-mav-planning-msgs ros-kinetic-urdf ros-kinetic-image-transport ros-kinetic-roslint ros-kinetic-angles ros-kinetic-cv-bridge ros-kinetic-tf2-geometry-msgs ros-kinetic-xacro ffmpeg libavcodec-dev libavformat-dev libavutil-dev libswscale-dev ros-kinetic-camera-info-manager ros-kinetic-cmake-modules ros-kinetic-gazebo-msgs ros-kinetic-mavros-msgs ros-kinetic-control-toolbox ros-kinetic-mav-msgs ros-kinetic-libmavconn ros-kinetic-mavros ros-kinetic-octomap-msgs ros-kinetic-geographic-msgs ros-kinetic-mavlink ros-kinetic-mavros-extras ros-kinetic-mav-planning-msgs ros-kinetic-joy
+
+sudo apt-get -y install ros-kinetic-catkin
+
+sudo apt-get -y install rviz
+sudo apt-get -y install ros-kinetic-rviz-visual-tools
+
+sudo apt-get -y install ros-kinetic-controller-manager ros-kinetic-joint-state-controller ros-kinetic-joint-trajectory-controller ros-kinetic-rqt ros-kinetic-rqt-controller-manager ros-kinetic-rqt-joint-trajectory-controller ros-kinetic-ros-control ros-kinetic-rqt-gui
+
+sudo apt-get -y install ros-kinetic-rqt-plot ros-kinetic-rqt-graph ros-kinetic-rqt-rviz ros-kinetic-rqt-tf-tree
+
+sudo apt-get -y install ros-kinetic-gazebo-ros ros-kinetic-kdl-conversions ros-kinetic-kdl-parser ros-kinetic-forward-command-controller ros-kinetic-tf-conversions ros-kinetic-xacro ros-kinetic-joint-state-publisher ros-kinetic-robot-state-publisher
+
+sudo apt-get -y install ros-kinetic-ros-control ros-kinetic-ros-controllers
+
+
+sudo apt -y install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
+
+sudo apt-get install -y ros-kinetic-geographic-info
+
+sudo apt-get install -y ros-kinetic-ros-control
+sudo apt-get install -y ros-kinetic-gazebo-ros-control
+sudo apt-get install -y ros-kinetic-joy
+sudo apt-get install -y ros-kinetic-teleop-twist-keyboard
+sudo apt-get install -y ros-kinetic-laser-geometry
+sudo apt install -y ros-kinetic-driver-base
+
+	#You need to change ~/.ignition/fuel/config.yaml as following.
+
+	#url: https://api.ignitionfuel.org
+	#to
+
+	#url: https://api.ignitionrobotics.org
+
+
+sudo apt install python-rosdep
+sudo rosdep init
+rosdep update
+
+
+#================================================================================================
+#install opencv3 (https://learnopencv.com/install-opencv-3-4-4-on-ubuntu-18-04/)*made changes
+cvVersion="3.4.4"
+mkdir open_cv_dir
+mkdir installation
+mkdir installation/OpenCV-"$cvVersion"
+
+
+
+
+sudo apt -y remove x264 libx264-dev
+
+## Install dependencies
+sudo apt -y install build-essential checkinstall cmake pkg-config yasm
+sudo apt -y install git gfortran
+sudo apt -y install libjpeg8-dev libpng-dev
+
+sudo apt -y install software-properties-common
+#sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
+#sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main"
+sudo apt -y update
+
+sudo apt -y install libjasper1
+sudo apt -y install libtiff-dev
+
+sudo apt -y install libavcodec-dev libavformat-dev libswscale-dev libdc1394-22-dev
+sudo apt -y install libxine2-dev libv4l-dev
+cd /usr/include/linux
+sudo ln -s -f ../libv4l1-videodev.h videodev.h
+cd /home/dronecomp/open_cv_dir
+
+sudo apt -y install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
+sudo apt -y install libgtk2.0-dev libtbb-dev qt5-default
+sudo apt -y install libatlas-base-dev
+sudo apt -y install libfaac-dev libmp3lame-dev libtheora-dev
+sudo apt -y install libvorbis-dev libxvidcore-dev
+sudo apt -y install libopencore-amrnb-dev libopencore-amrwb-dev
+sudo apt -y install libavresample-dev
+sudo apt -y install x264 v4l-utils
+
+# Optional dependencies
+sudo apt -y install libprotobuf-dev protobuf-compiler
+sudo apt -y install libgoogle-glog-dev libgflags-dev
+sudo apt -y install libgphoto2-dev libeigen3-dev libhdf5-dev doxygen
+
+
+git clone https://github.com/opencv/opencv.git
+cd opencv
+git checkout 3.4
+cd ..
+
+git clone https://github.com/opencv/opencv_contrib.git
+cd opencv_contrib
+git checkout 3.4
+cd ..
+
+cd opencv
+mkdir build
+
+#comment out anaconda init from ~/.bashrc
+
+
+#restart terminal
+
+cd open_cv_dir/opencv/build
+
+
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+	-D CMAKE_INSTALL_PREFIX=/usr/local \
+	-D OPENCV_GENERATE_PKGCONFIG=ON \
+	-D INSTALL_C_EXAMPLES=OFF \
+	-D INSTALL_PYTHON_EXAMPLES=OFF \
+	-D WITH_TBB=ON \
+	-D WITH_V4L=ON \
+	-D BUILD_TIFF=ON \
+	-D PYTHON2_INCLUDE_DIR=/usr/include/python2.7 \
+	-D PYTHON2_LIBRARY=/usr/include/python2.7 \
+	-D BUILD_opencv_python2=OFF \
+	-D BUILD_opencv_python3=ON \
+	-D PYTHON3_EXECUTABLE=/home/dronecomp/anaconda3/bin/python3.9 \
+	-D PYTHON3_PACKAGES_PATH=/home/dronecomp/anaconda3/lib/python3.9/site-packages/ \
+	-D PYTHON3_LIBRARIES=/home/dronecomp/anaconda3/lib/libpython3.9m.so \
+	-D PYTHON3_LIBRARY=/home/dronecomp/anaconda3/lib/libpython3.9m.so \
+	-D PYTHON3_INCLUDE=/home/dronecomp/anaconda3/include/python3.9m \
+	-D PYTHON3_NUMPY_INCLUDE_DIRS=/home/dronecomp/anaconda3/lib/python3.9/site-packages/numpy/core/include \
+	-D INSTALL_PYTHON_EXAMPLES=ON \
+	-D PYTHON_DEFAULT_EXECUTABLE=/home/dronecomp/anaconda3/bin/python3.9 \
+	-D PYTHON_INCLUDE_DIR=/home/dronecomp/anaconda3/include/python3.9m/ \
+	-D OPENCV_PYTHON3_INSTALL_PATH=/home/dronecomp/anaconda3/pkgs \
+	-D WITH_FFMPEG=ON .. \
+	-D WITH_QT=ON \
+	-D WITH_OPENGL=ON \
+	-D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
+	-D BUILD_EXAMPLES=ON ..
+
+
+
+
+make -j4
+sudo make install
+
+#restore anaconda init in ~/.bashrc
+
+
+
+#using openCV c++
+	#CMAKE
+SET(OpenCV_DIR /home/dronecomp/open_cv_dir/installation/OpenCV-3.4.4/share/OpenCV/)
+	# g++ Makefile
+CFLAGS = `pkg-config --cflags opencv2`
+LIBS = `pkg-config --libs opencv2`
+
+% : %.cpp
+	g++ -Wall -o $@ $< $(CFLAGS) $(LIBS)
+
+
+
+
+#======= Open CV should be done=============================
+#======= OnBoard SDK =======================================
+# make a dji account, make an app https://developer.dji.com/user/apps/#onboard
+sudo usermod -a -G dialout $USER
+
+sudo apt -y install ros-kinetic-nmea-comms
+sudo apt -y install ffmpeg
+sudo apt -y install libusb-1.0-0-dev
+sudo apt -y install libsdl2-dev
+sudo apt-get -y install libavcodec-dev libswresample-dev
+sudo apt-get -y install ros-kinetic-tf
+
+
+#reboot
+git clone https://github.com/dji-sdk/Onboard-SDK/
+cd Onboard-SDK/
+git checkout 3.2
+git status #to confirm
+mkdir build
+cd build
+cmake ..
+make
+gedit ../sample/linux/common/UserConfig.txt
+
+app_id : **ID FROM APP
+app_key :** KEY FROM APP
+device : /dev/ttyUSB0 // might be /dev/ttyACM0
+baudrate : 230400
+acm_port: /dev/ttyACM0
+
+#save and close
+
+cp ../sample/linux/common/UserConfig.txt bin/
+
+sudo make install djiosdk-core
+
+
+cd ~/Onboard-SDK/build/bin
+./djiosdk-linux-sample UserConfig.txt
+
+
+
+******************notes************************
+
+
+
+
+
+
+
+
+
+
+
