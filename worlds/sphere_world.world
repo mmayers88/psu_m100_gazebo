@@ -99,7 +99,7 @@
           <uri>/home/dronecomp/drone_ws/src/hku_m100_gazebo/model/collision_sphere</uri>
         </include>
       </model>
-      <pose>0 0 0 0 0 0</pose>
+      <pose>0 0 10 0 0 0</pose>
       <box>
         <size>30 30 3</size>
       </box>
