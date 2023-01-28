@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "psu_m100_gasSensor");
 	ros::NodeHandle n;
-	ros::Publisher pub = n.advertise<hku_m100_gazebo::GasSensor>("hku_m100_gazebo/message", 1000);
+	ros::Publisher pub = n.advertise<hku_m100_gazebo::GasSensor>("hku_m100_gazebo/GasSensor", 1000);
 	ros::Rate loop_rate(10);
 	SphereMonitor monitor;
 	monitor.gazebo_client.waitForExistence();
