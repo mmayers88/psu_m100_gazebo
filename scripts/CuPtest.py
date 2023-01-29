@@ -63,7 +63,7 @@ def init_state():
 	#fly until finding the first  cut edge
 	while True:
 		#move up
-		for i in range(20):
+		for i in range(50):
 			drone.attitude_control(DJIDrone.HORIZ_POS|DJIDrone.VERT_VEL|DJIDrone.YAW_ANG|DJIDrone.HORIZ_BODY|DJIDrone.STABLE_ON, 2, 0, 0, 0)
 			time.sleep(0.02)
 		time.sleep(5)
@@ -75,6 +75,8 @@ def init_state():
 		#if local sample is below threshold of border
 		if msg_b < thresh_num:
 			#edge is found: start CuP
+			coor_a = (int(coor_a[0]),int(coor_a[1]))
+			coor_b = (coor_a[0] + 10, coor_a[1])
 			break
 		else:
 			#new edge is old edge, keep flying, try again
