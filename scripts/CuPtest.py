@@ -159,7 +159,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 			print("Low Power")
 			return GPS_coor
 
-	return GPS_coor
+		return GPS_coor
 	'''if xState:
 		#move
 		#check state
