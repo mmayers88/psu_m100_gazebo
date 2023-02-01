@@ -11,8 +11,7 @@ import math
 import os
 
 #settings
-THRESH_NUM = 48.0
-SLEEPTIME = 10
+thresh_num = 48.0
 
 #set current binary state 1 or True
 xState = True
@@ -69,12 +68,11 @@ def init_state():
 			time.sleep(0.02)
 		time.sleep(5)
 		#take second sample
-		gas_sensor_msg = GasSensor()
 		msg_b = gas_sensor_msg.data
 		#save coordinates
 		coor_b = (drone.local_position.x,drone.local_position.y)
 		#if local sample is below threshold of border
-		if msg_b < THRESH_NUM:
+		if msg_b < thresh_num:
 			#edge is found: start CuP
 			coor_a = (int(coor_a[0]),int(coor_a[1]))
 			coor_b = (coor_a[0] + 10, coor_a[1])
@@ -92,12 +90,8 @@ def rot_cell_points(origin, dir, buff = 10):
 	)
 	if dir == 0:
 		return arr
-	if dir == 1:
+	for i in range(dir):
 		arr = rotate(arr, arr[0], -90)
-	if dir == 2:
-		arr = rotate(arr, arr[0], -180)
-	if dir == 3:
-		arr = rotate(arr, arr[0], -270)
 	return arr
 
 			
@@ -128,21 +122,21 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 		# get prospective points of node and rotate
 		cell_points = rot_cell_points(coor_a, dir)
 		drone.local_position_navigation_send_request(cell_points[2][0],cell_points[2][1],3)
-		time.sleep(SLEEPTIME)
+		time.sleep(10)
 		#take sample
 		msg_c = gas_sensor_msg.data
 		#check for edge
-		if msg_c > THRESH_NUM:
+		if msg_c > thresh_num:
 			msg_a = msg_c
 			coor_a = (cell_points[2][0],cell_points[2][1])
 		else:
 			#logic to move past next point
 			# check other point
 			drone.local_position_navigation_send_request(cell_points[3][0],cell_points[3][1],3)
-			time.sleep(SLEEPTIME)
+			time.sleep(10)
 			#take sample
 			msg_d = gas_sensor_msg.data
-			if msg_d > THRESH_NUM:
+			if msg_d > thresh_num:
 				msg_b = msg_c
 				msg_a = msg_d
 				coor_a = (cell_points[3][0],cell_points[3][1])
@@ -154,7 +148,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 		#write coordinates
 		gps_x = drone.global_position.logitude
 		gps_y = drone.global_position.latitude,
-		GPS_coor = np.vstack((drone.global_position.time,GPS_coor,[gps_x,gps_y,coor_a.x,coor_a.y,coor_b.x,coor_b.y]))
+		GPS_coor = np.vstack((GPS_coor,[gps_x,gps_y,coor_a.x,coor_a.y,coor_b.x,coor_b.y]))
 		#check terminal state
 			#head home if done
 
@@ -165,76 +159,63 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 			return GPS_coor
 
 		return GPS_coor
-	'''if xState:
-		#move
-		#check state
-		#if bounds are 
-	#fly in a square
-	drone.local_position_navigation_send_request(6,6,3)
-	#drone.local_position_control(3,3,3,0)
-	time.sleep(6)
-	drone.local_position_control(6,6,3,0)'''
 
 
 def main():
-	'''
-	for i in range(1):
-		#rospy.init_node('test_node')
-		print("========================")
-		print(GasSensor())
-		rospy.Subscriber("hku_m100_gazebo/GasSensor", GasSensor, callback)
-		print("===========END==========")
-		gas_sensor_msg = GasSensor()
-		print(gas_sensor_msg.data)
-	loc_x = drone.local_position.x
-	loc_y = drone.local_position.y'''
+    drone.local_position_navigation_send_request(6,6,3)
+    time.sleep(10)
+    print(gas_sensor_msg)
+    drone.local_position_navigation_send_request(6,6,3)
+    time.sleep(10)
+    print(gas_sensor_msg)
+    return
+    # init state: this is a priori
+    msg_a, msg_b, coor_a, coor_b = init_state()
 
-	# init state: this is a priori
-	msg_a, msg_b, coor_a, coor_b = init_state()
-	
-	#CuP
-	GPS_data = CuP(msg_a, msg_b, coor_a, coor_b)
+    #CuP
+    GPS_data = CuP(msg_a, msg_b, coor_a, coor_b)
 
 
 if __name__ == "__main__":
-	#test to have the drone fly in a square and land, for purposes of testing automatic flight.
-	drone = DJIDrone()
-	print("control requesting")
-	drone.request_sdk_permission_control() #request control
-	time.sleep(1)
-	print("control requested")
-	drone.arm_drone()
-	time.sleep(1)
-	print("Drone Armed")
-	#check battery before takeoff
-	print(drone.power_status)
-	if low_power(drone.power_status.percentage):
-		print("Drone Disarmed")
-		print("Low Power")
-	else:
-		drone_move(0,0,3,60)	#takeoff
-		drone.takeoff() 		#takeoff: don't know if this actually does anything?
-		print(drone.odometry)
-		print(drone.compass)
-		print(drone.flight_status)
-		print(drone.global_position)
-		print(drone.power_status)
-		
-		print("global")			#GPS coordinates
-		print(drone.global_position)
-		print("local") 			#position in RVIZ grid units(meters)
-		print(drone.local_position)
-		
-		time.sleep(2)
-	GPS_coor = np.array([
-		drone.global_position.time,
-		drone.global_position.logitude, 
-		drone.global_position.latitude, 
-		drone.local_position.x, 
-		drone.local_position.y, 
-		drone.local_position.x, 
-		drone.local_position.y])
-	main()
+    #test to have the drone fly in a square and land, for purposes of testing automatic flight.
+    drone = DJIDrone()
+    gas_sensor_msg = GasSensor()
+    print("control requesting")
+    drone.request_sdk_permission_control() #request control
+    time.sleep(1)
+    print("control requested")
+    drone.arm_drone()
+    time.sleep(1)
+    print("Drone Armed")
+    #check battery before takeoff
+    print(drone.power_status)
+    if low_power(drone.power_status.percentage):
+        print("Drone Disarmed")
+        print("Low Power")
+    else:
+        drone_move(0,0,3,0)	#takeoff
+        drone.takeoff() 		#takeoff: don't know if this actually does anything?
+        print(drone.odometry)
+        print(drone.compass)
+        print(drone.flight_status)
+        print(drone.global_position)
+        print(drone.power_status)
+        
+        print("global")			#GPS coordinates
+        print(drone.global_position)
+        print("local") 			#position in RVIZ grid units(meters)
+        print(drone.local_position)
+        
+        time.sleep(2)
+    GPS_coor = np.array([
+        drone.global_position.logitude, 
+        drone.global_position.latitude, 
+        drone.local_position.x, 
+        drone.local_position.y, 
+        drone.local_position.x, 
+        drone.local_position.y,
+		drone.global_position.time])
+    main()
 
 
 #source ../../devel/setup.bash 
