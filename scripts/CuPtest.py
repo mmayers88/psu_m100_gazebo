@@ -214,6 +214,7 @@ if __name__ == "__main__":
 	else:
 		drone_move(0,0,3,60)	#takeoff
 		drone.takeoff() 		#takeoff: don't know if this actually does anything?
+		print("takeoff")
 		print(drone.odometry)
 		print(drone.compass)
 		print(drone.flight_status)

@@ -146,7 +146,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 				coor_b = (cell_points[3][0],cell_points[3][1])
 				write_msg = msg_a
 		#write coordinates
-		gps_x = drone.global_position.logitude
+		gps_x = drone.global_position.longitude
 		gps_y = drone.global_position.latitude,
 		GPS_coor = np.vstack((GPS_coor,[gps_x,gps_y,coor_a.x,coor_a.y,coor_b.x,coor_b.y]))
 		#check terminal state
@@ -177,45 +177,50 @@ def main():
 
 
 if __name__ == "__main__":
-    #test to have the drone fly in a square and land, for purposes of testing automatic flight.
-    drone = DJIDrone()
-    gas_sensor_msg = GasSensor()
-    print("control requesting")
-    drone.request_sdk_permission_control() #request control
-    time.sleep(1)
-    print("control requested")
-    drone.arm_drone()
-    time.sleep(1)
-    print("Drone Armed")
-    #check battery before takeoff
-    print(drone.power_status)
-    if low_power(drone.power_status.percentage):
-        print("Drone Disarmed")
-        print("Low Power")
-    else:
-        drone_move(0,0,3,0)	#takeoff
-        drone.takeoff() 		#takeoff: don't know if this actually does anything?
-        print(drone.odometry)
-        print(drone.compass)
-        print(drone.flight_status)
-        print(drone.global_position)
-        print(drone.power_status)
-        
-        print("global")			#GPS coordinates
-        print(drone.global_position)
-        print("local") 			#position in RVIZ grid units(meters)
-        print(drone.local_position)
-        
-        time.sleep(2)
-    GPS_coor = np.array([
-        drone.global_position.logitude, 
-        drone.global_position.latitude, 
-        drone.local_position.x, 
-        drone.local_position.y, 
-        drone.local_position.x, 
-        drone.local_position.y,
-		drone.global_position.time])
-    main()
+	#test to have the drone fly in a square and land, for purposes of testing automatic flight.
+	drone = DJIDrone()
+	gas_sensor_msg = GasSensor()
+	print("control requesting")
+	drone.request_sdk_permission_control() #request control
+	time.sleep(1)
+	print("control requested")
+	drone.arm_drone()
+	time.sleep(1)
+	print("Drone Armed")
+	#check battery before takeoff
+	print(drone.power_status)
+	if low_power(drone.power_status.percentage):
+		print("Drone Disarmed")
+		print("Low Power")
+	else:
+		drone.takeoff() 	
+		time.sleep(2)
+		for i in range(50):
+			drone.attitude_control(DJIDrone.HORIZ_POS|DJIDrone.VERT_VEL|DJIDrone.YAW_ANG|DJIDrone.HORIZ_BODY|DJIDrone.STABLE_ON, 0, 0, 3, 0)
+			time.sleep(0.02)
+			#takeoff: don't know if this actually does anything?
+		print("takeoff")
+		'''print(drone.odometry)
+		print(drone.compass)
+		print(drone.flight_status)
+		print(drone.global_position)
+		print(drone.power_status)
+		print("global")			#GPS coordinates
+		print(drone.global_position)
+		print("local") 			#position in RVIZ grid units(meters)
+		print(drone.local_position)'''
+	
+
+		time.sleep(2)
+	GPS_coor = np.array([
+		drone.global_position.longitude, 
+		drone.global_position.latitude, 
+		drone.local_position.x, 
+		drone.local_position.y, 
+		drone.local_position.x, 
+		drone.local_position.y,
+		drone.global_position.header.stamp.secs])
+	main()
 
 
 #source ../../devel/setup.bash 
