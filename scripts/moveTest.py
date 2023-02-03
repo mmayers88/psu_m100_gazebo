@@ -162,24 +162,26 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 
 
 def main():
-    drone.local_position_navigation_send_request(6,6,3)
-    time.sleep(10)
-    print(gas_sensor_msg)
-    drone.local_position_navigation_send_request(6,6,3)
-    time.sleep(10)
-    print(gas_sensor_msg)
-    return
-    # init state: this is a priori
-    msg_a, msg_b, coor_a, coor_b = init_state()
+	drone.local_position_navigation_send_request(6,6,3)
+	time.sleep(10)
+	print(rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor))
+	drone.local_position_navigation_send_request(6,6,3)
+	time.sleep(10)
+	print(rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor))
+	drone.gohome() #land
+	return
+	# init state: this is a priori
+	msg_a, msg_b, coor_a, coor_b = init_state()
 
-    #CuP
-    GPS_data = CuP(msg_a, msg_b, coor_a, coor_b)
+	#CuP
+	GPS_data = CuP(msg_a, msg_b, coor_a, coor_b)
 
 
 if __name__ == "__main__":
 	#test to have the drone fly in a square and land, for purposes of testing automatic flight.
 	drone = DJIDrone()
-	gas_sensor_msg = GasSensor()
+	#rospy.Subscriber("hku_m100_gazebo/GasSensor", GasSensor, callback)
+	gas_sensor_msg = rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor)
 	print("control requesting")
 	drone.request_sdk_permission_control() #request control
 	time.sleep(1)
@@ -212,6 +214,7 @@ if __name__ == "__main__":
 	
 
 		time.sleep(2)
+		print(rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor))
 	GPS_coor = np.array([
 		drone.global_position.longitude, 
 		drone.global_position.latitude, 

@@ -6,6 +6,8 @@ project(hku_m100_gazebo)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   message_generation
+  actionlib_msgs
+  actionlib
   roscpp
   rospy
   std_msgs
@@ -70,15 +72,12 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 # )
 
 ## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
+add_action_files(FILES DroneAction.action)
 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
+   actionlib_msgs
    std_msgs
  )
 
@@ -114,6 +113,8 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 catkin_package(
   #INCLUDE_DIRS
   CATKIN_DEPENDS 
+  actionlib_msgs 
+  actionlib
   roscpp
   std_msgs
   rospy

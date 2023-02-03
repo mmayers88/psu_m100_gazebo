@@ -130,6 +130,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 		drone.local_position_navigation_send_request(cell_points[2][0],cell_points[2][1],3)
 		time.sleep(SLEEPTIME)
 		#take sample
+		gas_sensor_msg = GasSensor()
 		msg_c = gas_sensor_msg.data
 		#check for edge
 		if msg_c > THRESH_NUM:
@@ -141,6 +142,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 			drone.local_position_navigation_send_request(cell_points[3][0],cell_points[3][1],3)
 			time.sleep(SLEEPTIME)
 			#take sample
+			gas_sensor_msg = GasSensor()
 			msg_d = gas_sensor_msg.data
 			if msg_d > THRESH_NUM:
 				msg_b = msg_c
@@ -199,6 +201,7 @@ def main():
 if __name__ == "__main__":
 	#test to have the drone fly in a square and land, for purposes of testing automatic flight.
 	drone = DJIDrone()
+	rospy.Subscriber("hku_m100_gazebo/GasSensor", GasSensor, callback)
 	print("control requesting")
 	drone.request_sdk_permission_control() #request control
 	time.sleep(1)
