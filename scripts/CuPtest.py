@@ -11,7 +11,7 @@ import math
 import os
 
 #settings
-THRESH_NUM = 48.0
+THRESH_NUM = 0.87
 SLEEPTIME = 10
 
 #set current binary state 1 or True
@@ -26,9 +26,11 @@ LEFT_Y = 3
 #for liftoff
 UP_Z = 3
 
+
+
 def callback(data):
 	print(data)
-	rospy.loginfo(rospy.get_caller_id() + "I heard %f", data.data)
+	rospy.longinfo(rospy.get_caller_id() + "I heard %f", data.data)
 	print("In Callback")
 
 def rotate(p, origin=(0, 0), degrees=0):
@@ -73,6 +75,8 @@ def init_state():
 		msg_b = gas_sensor_msg.data
 		#save coordinates
 		coor_b = (drone.local_position.x,drone.local_position.y)
+		print("MESSAGE B")
+		print(msg_b)
 		#if local sample is below threshold of border
 		if msg_b < THRESH_NUM:
 			#edge is found: start CuP
@@ -87,9 +91,11 @@ def init_state():
 
 def rot_cell_points(origin, dir, buff = 10):
 	arr = np.array(
-		[[(origin.x, origin.y),(origin.x, origin.y+buff)],
-		[(origin.x+buff, origin.y+buff),(origin.x+buff, origin.y)]]
+		[[(origin[0], origin[1]),(origin[0], origin[1]+buff)],
+		[(origin[0]+buff, origin[1]+buff),(origin[0]+buff, origin[1])]]
 	)
+	print("Original Arr:")
+	print(arr)
 	if dir == 0:
 		return arr
 	if dir == 1:
@@ -98,10 +104,24 @@ def rot_cell_points(origin, dir, buff = 10):
 		arr = rotate(arr, arr[0], -180)
 	if dir == 3:
 		arr = rotate(arr, arr[0], -270)
-	return arr
+	arr = np.vstack((arr[0],arr[1]))
+	print("arr")
+	print(arr.astype(int))
+	return arr.astype(int)
 
 			
 def CuP(msg_a, msg_b, coor_a, coor_b):
+	print("=====================================")
+	print("===========starting CuP==============")
+	print("=====================================")
+	GPS_coor = np.array([
+	drone.global_position.header.stamp.secs,
+	drone.global_position.longitude, 
+	drone.global_position.latitude, 
+	drone.local_position.x, 
+	drone.local_position.y, 
+	drone.local_position.x, 
+	drone.local_position.y])
 	while True:
 		#check edges
 		#find line orientation
@@ -126,6 +146,8 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 				# b
 				dir = 2
 		# get prospective points of node and rotate
+		print(coor_a)
+		print(coor_b)
 		cell_points = rot_cell_points(coor_a, dir)
 		drone.local_position_navigation_send_request(cell_points[2][0],cell_points[2][1],3)
 		time.sleep(SLEEPTIME)
@@ -137,7 +159,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 			msg_a = msg_c
 			coor_a = (cell_points[2][0],cell_points[2][1])
 		else:
-			#logic to move past next point
+			#longic to move past next point
 			# check other point
 			drone.local_position_navigation_send_request(cell_points[3][0],cell_points[3][1],3)
 			time.sleep(SLEEPTIME)
@@ -154,9 +176,9 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 				coor_b = (cell_points[3][0],cell_points[3][1])
 				write_msg = msg_a
 		#write coordinates
-		gps_x = drone.global_position.logitude
+		gps_x = drone.global_position.longitude
 		gps_y = drone.global_position.latitude,
-		GPS_coor = np.vstack((drone.global_position.header.stamp.secs,GPS_coor,[gps_x,gps_y,coor_a.x,coor_a.y,coor_b.x,coor_b.y]))
+		GPS_coor = np.vstack((GPS_coor,[drone.global_position.header.stamp.secs,gps_x,gps_y,coor_a[0],coor_a[1],coor_b[0],coor_b[1]]))
 		#check terminal state
 			#head home if done
 
@@ -165,8 +187,9 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 			print("Drone Disarmed")
 			print("Low Power")
 			return GPS_coor
-
-		return GPS_coor
+		
+	#this will happen when we finish the end condition
+	#return GPS_coor
 	'''if xState:
 		#move
 		#check state
@@ -202,7 +225,6 @@ def main():
 if __name__ == "__main__":
 	#test to have the drone fly in a square and land, for purposes of testing automatic flight.
 	drone = DJIDrone()
-	rospy.Subscriber("hku_m100_gazebo/GasSensor", GasSensor, callback)
 	print("control requesting")
 	drone.request_sdk_permission_control() #request control
 	time.sleep(1)
@@ -231,14 +253,7 @@ if __name__ == "__main__":
 		print(drone.local_position)
 		
 		time.sleep(2)
-	GPS_coor = np.array([
-		drone.global_position.header.stamp.secs,
-		drone.global_position.logitude, 
-		drone.global_position.latitude, 
-		drone.local_position.x, 
-		drone.local_position.y, 
-		drone.local_position.x, 
-		drone.local_position.y])
+
 	main()
 
 

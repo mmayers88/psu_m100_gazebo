@@ -37,8 +37,10 @@ int main(int argc, char **argv)
             //cout << col + row * 1000 << " " << data[row][col] << endl;
             geometry_msgs::Point sphere_point;
             geometry_msgs::Point sphere_point2;
-            sphere_point.x = row - (array_xy/2);
-            sphere_point.y = col - (array_xy/2);
+            //int diff = array_xy/2;
+            int diff = 650;
+            sphere_point.x = row - (diff);
+            sphere_point.y = col - (diff);
             sphere_point.z = 0;
             sphere_centers.push_back(sphere_point);
 
