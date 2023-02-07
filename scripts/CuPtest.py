@@ -57,7 +57,7 @@ def drone_rot(rot = 0, r=60):
 
 def init_state():
 	#take sample
-	gas_sensor_msg = GasSensor()
+	gas_sensor_msg = rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor)
 	msg_a = gas_sensor_msg.data
 	#save coordinates
 	coor_a = (drone.local_position.x,drone.local_position.y)
@@ -69,7 +69,7 @@ def init_state():
 			time.sleep(0.02)
 		time.sleep(5)
 		#take second sample
-		gas_sensor_msg = GasSensor()
+		gas_sensor_msg = rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor)
 		msg_b = gas_sensor_msg.data
 		#save coordinates
 		coor_b = (drone.local_position.x,drone.local_position.y)
@@ -130,7 +130,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 		drone.local_position_navigation_send_request(cell_points[2][0],cell_points[2][1],3)
 		time.sleep(SLEEPTIME)
 		#take sample
-		gas_sensor_msg = GasSensor()
+		gas_sensor_msg = rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor)
 		msg_c = gas_sensor_msg.data
 		#check for edge
 		if msg_c > THRESH_NUM:
@@ -142,7 +142,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 			drone.local_position_navigation_send_request(cell_points[3][0],cell_points[3][1],3)
 			time.sleep(SLEEPTIME)
 			#take sample
-			gas_sensor_msg = GasSensor()
+			gas_sensor_msg = rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor)
 			msg_d = gas_sensor_msg.data
 			if msg_d > THRESH_NUM:
 				msg_b = msg_c
@@ -156,7 +156,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 		#write coordinates
 		gps_x = drone.global_position.logitude
 		gps_y = drone.global_position.latitude,
-		GPS_coor = np.vstack((drone.global_position.time,GPS_coor,[gps_x,gps_y,coor_a.x,coor_a.y,coor_b.x,coor_b.y]))
+		GPS_coor = np.vstack((drone.global_position.header.stamp.secs,GPS_coor,[gps_x,gps_y,coor_a.x,coor_a.y,coor_b.x,coor_b.y]))
 		#check terminal state
 			#head home if done
 
@@ -196,6 +196,7 @@ def main():
 	
 	#CuP
 	GPS_data = CuP(msg_a, msg_b, coor_a, coor_b)
+	GPS_data.tofile('data.csv', sep = ',')
 
 
 if __name__ == "__main__":
@@ -231,7 +232,7 @@ if __name__ == "__main__":
 		
 		time.sleep(2)
 	GPS_coor = np.array([
-		drone.global_position.time,
+		drone.global_position.header.stamp.secs,
 		drone.global_position.logitude, 
 		drone.global_position.latitude, 
 		drone.local_position.x, 
