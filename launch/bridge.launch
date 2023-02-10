@@ -31,8 +31,8 @@
 	<arg name="output_frame" default="camera_optical_frame" />
 	<arg name="tf_prefix" default="hku_m100" />
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find hku_m100_gazebo)/rviz_cfg/flight.rviz"/>
-	
-    <!-- <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0.0 0.0 0.0 0.0 0.0 0.0 0.0 /world /world_frame 100" /> -->
+
+	<node pkg="tf2_ros" type="static_transform_publisher" name="world_broadcast" args="0 0 0 0 0 0 1 world /map" />
     
 	<node pkg="hku_m100_gazebo" type="psu_m100_gasSensor" name="psu_m100_gasSensor" output="screen"/>
 

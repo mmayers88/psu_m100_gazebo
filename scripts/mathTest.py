@@ -61,3 +61,16 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+import numpy as np
+from PIL import Image
+A = np.genfromtxt('array.csv', delimiter=',')
+A *= (255.0/A.max())
+#A = np.flip(A,0)
+#A = np.flip(A,1)
+#im = Image.fromarray(np.flip(A,1))
+im = Image.fromarray(A)
+#im = im.rotate(180)
+im.convert('L').save('array.png')

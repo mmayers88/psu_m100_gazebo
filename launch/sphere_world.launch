@@ -19,6 +19,11 @@
 			<arg name="name" value="hku_m100" />
 			<arg name="tf_prefix" value="hku_m100" />
 		</include>
+
+	<arg name="map_file" value="$(find hku_m100_gazebo)/map.yaml"/>
+
+	<!-- Run the map server -->
+	<node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 	
 
 </launch>

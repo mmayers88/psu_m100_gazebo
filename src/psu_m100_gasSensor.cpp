@@ -51,6 +51,8 @@ public:
 		}
 		if (count > 0.0)
 			std::cout << count << std::endl;
+		else
+			std::cout << -1.0 << std::endl;
 		return count;
 	};
 	double distance(double x1, double y1, double z1, double x2, double y2, double z2)

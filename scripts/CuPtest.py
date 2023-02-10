@@ -11,7 +11,7 @@ import math
 import os
 
 #settings
-THRESH_NUM = 0.87
+THRESH_NUM = 0.80
 SLEEPTIME = 10
 
 #set current binary state 1 or True
@@ -24,9 +24,9 @@ RIGHT_Y = -3
 LEFT_Y = 3
 
 #for liftoff
-UP_Z = 3
+UP_Z = 6
 
-
+DATA_FILE = "data_text.csv"
 
 def callback(data):
 	print(data)
@@ -148,6 +148,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 	drone.local_position.y, 
 	drone.local_position.x, 
 	drone.local_position.y])
+	np.savetxt(DATA_FILE, GPS_coor, fmt='%f', delimiter=',', newline='\n')
 	while True:
 		#check edges
 		#find line orientation
@@ -175,7 +176,8 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 		print(coor_a)
 		print(coor_b)
 		cell_points = rot_cell_points(coor_a, dir)
-		drone.local_position_navigation_send_request(cell_points[2][0],cell_points[2][1],3)
+		drone.local_position_navigation_send_request(cell_points[2][0],cell_points[2][1],UP_Z)
+		print("moving to x3")
 		time.sleep(SLEEPTIME)
 		#take sample
 		gas_sensor_msg = rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor)
@@ -187,7 +189,8 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 		else:
 			#longic to move past next point
 			# check other point
-			drone.local_position_navigation_send_request(cell_points[3][0],cell_points[3][1],3)
+			drone.local_position_navigation_send_request(cell_points[3][0],cell_points[3][1],UP_Z)
+			print("moving to x4")
 			time.sleep(SLEEPTIME)
 			#take sample
 			gas_sensor_msg = rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor)
@@ -203,8 +206,11 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 				write_msg = msg_a
 		#write coordinates
 		gps_x = drone.global_position.longitude
-		gps_y = drone.global_position.latitude,
-		GPS_coor = np.vstack((GPS_coor,[drone.global_position.header.stamp.secs,gps_x,gps_y,coor_a[0],coor_a[1],coor_b[0],coor_b[1]]))
+		gps_y = drone.global_position.latitude
+		print([drone.global_position.header.stamp.secs,gps_x,gps_y,coor_a[0],coor_a[1],coor_b[0],coor_b[1]])
+		temp_coor = np.array([drone.global_position.header.stamp.secs,gps_x,gps_y,coor_a[0],coor_a[1],coor_b[0],coor_b[1]])
+		GPS_coor = np.vstack((GPS_coor,temp_coor))
+		np.savetxt(DATA_FILE, GPS_coor, fmt='%f', delimiter=',', newline='\n')
 		#check terminal state
 			#head home if done
 

@@ -1,0 +1,12 @@
+digraph G {
+"hku_m100/base_link" -> "hku_m100/camera_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 64.638 sec old)\nBuffer length: 0.000 sec\n"];
+"hku_m100/base_stabilized" -> "hku_m100/base_link"[label="Broadcaster: /ground_truth_to_tf\nAverage rate: 10.241 Hz\nMost recent transform: 1676055042.726 ( -1676054978.088 sec old)\nBuffer length: 4.882 sec\n"];
+"hku_m100/camera_link" -> "hku_m100/camera_optical_frame"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 64.638 sec old)\nBuffer length: 0.000 sec\n"];
+"world" -> "map"[label="Broadcaster: /world_broadcast\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 64.638 sec old)\nBuffer length: 0.000 sec\n"];
+"world" -> "hku_m100/base_footprint"[label="Broadcaster: /ground_truth_to_tf\nAverage rate: 10.241 Hz\nMost recent transform: 1676055042.726 ( -1676054978.088 sec old)\nBuffer length: 4.882 sec\n"];
+"hku_m100/base_footprint" -> "hku_m100/base_stabilized"[label="Broadcaster: /ground_truth_to_tf\nAverage rate: 10.241 Hz\nMost recent transform: 1676055042.726 ( -1676054978.088 sec old)\nBuffer length: 4.882 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 64.638"[ shape=plaintext ] ;
+ }->"world";
+}
