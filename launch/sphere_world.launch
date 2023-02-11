@@ -13,6 +13,7 @@
 
 	<rosparam param="nr_of_obstacles">100</rosparam>
 	<rosparam param="array_xy">1000</rosparam>
+	<rosparam param="diff">0</rosparam>
 		<!-- Spawn simulated quadrotor uav -->
 		<include file="$(find hku_m100_gazebo)/launch/spawn_hku_m100.launch" >
 			<arg name="model" value="$(find hku_m100_gazebo)/urdf/hku_m100.urdf.xacro"/> 

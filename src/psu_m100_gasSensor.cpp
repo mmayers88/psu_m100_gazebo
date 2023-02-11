@@ -24,9 +24,11 @@ public:
 	std::string filename = "/home/dronecomp/drone_ws/src/hku_m100_gazebo/src/array.csv";
 	data_t data;
 	int array_xy;
+	int diff;
 	SphereMonitor()
 	{
 		nh.getParam("array_xy", array_xy);
+    	nh.getParam("diff", diff);
 		data.load(filename);
 		data.save(std::cout);
 	};
@@ -43,7 +45,6 @@ public:
 		if (gazebo_client.call(get_model_state))
 		{
 			//int diff = array_xy / 2;
-			int diff = 650;
 			if (drone_pose.x + diff > array_xy || drone_pose.y + diff > array_xy || drone_pose.x + diff < 0 || drone_pose.y + diff < 0)
 				count = 0.0;
 			else

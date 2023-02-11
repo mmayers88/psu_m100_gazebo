@@ -11,7 +11,7 @@ import math
 import os
 
 #settings
-THRESH_NUM = 0.80
+THRESH_NUM = 0.70
 SLEEPTIME = 10
 
 #set current binary state 1 or True
@@ -122,6 +122,7 @@ def init_state():
 		coor_b = (drone.local_position.x,drone.local_position.y)
 		print("MESSAGE B")
 		print(msg_b)
+		print(coor_b)
 		#if local sample is below threshold of border
 		if msg_b < THRESH_NUM:
 			#edge is found: start CuP
@@ -182,6 +183,8 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 		#take sample
 		gas_sensor_msg = rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor)
 		msg_c = gas_sensor_msg.data
+		print("Sensor reading:")
+		print(msg_c)
 		#check for edge
 		if msg_c > THRESH_NUM:
 			msg_a = msg_c
@@ -195,6 +198,8 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 			#take sample
 			gas_sensor_msg = rospy.wait_for_message("hku_m100_gazebo/GasSensor", GasSensor)
 			msg_d = gas_sensor_msg.data
+			print("Sensor reading:")
+			print(msg_d)
 			if msg_d > THRESH_NUM:
 				msg_b = msg_c
 				msg_a = msg_d
@@ -246,6 +251,11 @@ def main():
 	loc_x = drone.local_position.x
 	loc_y = drone.local_position.y'''
 
+	#start at 650,650
+	for i in range(10):
+		drone.local_position_navigation_send_request(725,-650,3)
+		print("travelling to 725,650")
+		time.sleep(SLEEPTIME)
 	# init state: this is a priori
 	msg_a, msg_b, coor_a, coor_b = init_state()
 	

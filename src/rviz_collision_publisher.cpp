@@ -28,6 +28,8 @@ int main(int argc, char **argv)
     std::vector<geometry_msgs::Point> sphere_centers2;
     int array_xy;
     nh.getParam("array_xy", array_xy);
+    int diff;
+    nh.getParam("diff", diff);
     visual_tools_->loadMarkerPub();
     visual_tools_->waitForMarkerPub();
     visual_tools_->setLifetime(0);
@@ -38,7 +40,6 @@ int main(int argc, char **argv)
             geometry_msgs::Point sphere_point;
             geometry_msgs::Point sphere_point2;
             //int diff = array_xy/2;
-            int diff = 650;
             sphere_point.x = row - (diff);
             sphere_point.y = col - (diff);
             sphere_point.z = 0;
