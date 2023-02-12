@@ -227,31 +227,10 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 		
 	#this will happen when we finish the end condition
 	#return GPS_coor
-	'''if xState:
-		#move
-		#check state
-		#if bounds are 
-	#fly in a square
-	drone.local_position_navigation_send_request(6,6,3)
-	#drone.local_position_control(3,3,3,0)
-	time.sleep(6)
-	drone.local_position_control(6,6,3,0)'''
 
 
 def main():
-	'''
-	for i in range(1):
-		#rospy.init_node('test_node')
-		print("========================")
-		print(GasSensor())
-		rospy.Subscriber("hku_m100_gazebo/GasSensor", GasSensor, callback)
-		print("===========END==========")
-		gas_sensor_msg = GasSensor()
-		print(gas_sensor_msg.data)
-	loc_x = drone.local_position.x
-	loc_y = drone.local_position.y'''
-
-	#start at 650,650
+	#start at 725,650: Y coordinates are backwards in RVIZ for some reason
 	for i in range(10):
 		drone.local_position_navigation_send_request(725,-650,3)
 		print("travelling to 725,650")
