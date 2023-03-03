@@ -11,7 +11,7 @@ import math
 import os
 
 #settings
-THRESH_NUM = 0.70
+THRESH_NUM = 0.75
 SLEEPTIME = 10
 
 #set current binary state 1 or True
@@ -149,8 +149,24 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 	drone.local_position.y, 
 	drone.local_position.x, 
 	drone.local_position.y])
+	GPS_coor = GPS_coor.reshape((1,7))
 	np.savetxt(DATA_FILE, GPS_coor, fmt='%f', delimiter=',', newline='\n')
 	while True:
+		#check if done
+		'''print(GPS_coor)
+		print( GPS_coor.shape[1])
+		print(GPS_coor[0, -4:-2])
+		print(coor_a)
+		print(GPS_coor[0, -4:-2]-coor_a)
+		print(np.linalg.norm(GPS_coor[0, -4:-2]-coor_a))'''
+		print("Go Home Conditions:")
+		print("Number of data points: ", GPS_coor.shape[0], " > 10  Proximity to Start: ", np.linalg.norm(GPS_coor[0, -4:-2]-coor_a), " < 15")
+		print("=============")
+		if GPS_coor.shape[0] > 10 and np.linalg.norm(GPS_coor[0, -4:-2]-coor_a) < 15:
+			drone.go_home()
+			time.sleep(2)
+			print("Done! Going Home.")
+			break
 		#check edges
 		#find line orientation
 		dir = -1
@@ -214,6 +230,7 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 		gps_y = drone.global_position.latitude
 		print([drone.global_position.header.stamp.secs,gps_x,gps_y,coor_a[0],coor_a[1],coor_b[0],coor_b[1]])
 		temp_coor = np.array([drone.global_position.header.stamp.secs,gps_x,gps_y,coor_a[0],coor_a[1],coor_b[0],coor_b[1]])
+		temp_coor = temp_coor.reshape((1,7))
 		GPS_coor = np.vstack((GPS_coor,temp_coor))
 		np.savetxt(DATA_FILE, GPS_coor, fmt='%f', delimiter=',', newline='\n')
 		#check terminal state
@@ -231,10 +248,13 @@ def CuP(msg_a, msg_b, coor_a, coor_b):
 
 def main():
 	#start at 725,650: Y coordinates are backwards in RVIZ for some reason
-	for i in range(10):
+	while(1):
 		drone.local_position_navigation_send_request(725,-650,3)
 		print("travelling to 725,650")
-		time.sleep(SLEEPTIME)
+		time.sleep(SLEEPTIME//2)
+		print(drone.local_position.x, drone.local_position.y)
+		if np.abs(drone.local_position.x-725) < 1 and np.abs(drone.local_position.y - (-650)) < 1:
+			break
 	# init state: this is a priori
 	msg_a, msg_b, coor_a, coor_b = init_state()
 	

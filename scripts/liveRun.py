@@ -11,7 +11,7 @@ time.sleep(1)
 print("Drone Armed")
 
 
-
+drone.takeoff() 
 
 for i in range(60):
 		drone.attitude_control(DJIDrone.HORIZ_POS|DJIDrone.VERT_VEL|DJIDrone.YAW_ANG|DJIDrone.HORIZ_BODY|DJIDrone.STABLE_ON, 0, 0, 3, 0)
