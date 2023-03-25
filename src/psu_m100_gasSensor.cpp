@@ -70,7 +70,7 @@ private:
 		data.load(filename);
 		std::cout << "HERE!." << std::endl;
 		data.save(std::cout);
-		std::cout << "Spheres are live." << std::endl;
+		std::cout << "Spheres are live!" << std::endl;
 	};
 };
 
